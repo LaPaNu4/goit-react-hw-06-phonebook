@@ -21,7 +21,7 @@ React.useEffect(() => {
         contact.name && contact.name.toLowerCase() === name.toLowerCase()
     );
     if (isDuplicate) {
-      alert('This contact already exists in the phone book!');
+      alert('This contact already exists in the phone book!!');
       return;
     }
     const newContact = {
