@@ -5,16 +5,27 @@ import { addContact } from 'Redux/contactsSlice';
 
 
 function ContactForm() {
-   const [name, setName] = useState('');
-   const [number, setNumber] = useState('');
+    const [contact, setContact] = useState({
+      name: '',
+      number: '',
+    });
+  const { name, number } = contact;
    const dispatch = useDispatch();
   
+    const handleChange = event => {
+      setContact({
+        ...contact,
+        [event.target.name]: event.target.value,
+      });
+    };
 
    const handleSubmit = e => {
      e.preventDefault();
-     dispatch(addContact(name, number));
-     setName('');
-     setNumber('');
+     dispatch(addContact(contact));
+     setContact({
+       name: '',
+      number: '',
+     })
    };
 
 
@@ -27,7 +38,7 @@ function ContactForm() {
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={handleChange}
           required
         />
       </label>
@@ -38,7 +49,7 @@ function ContactForm() {
           name="number"
           value={number}
           pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-          onChange={e => setNumber(e.target.value)}
+          onChange={handleChange}
           required
         />
       </label>
