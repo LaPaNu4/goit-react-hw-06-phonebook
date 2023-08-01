@@ -1,28 +1,22 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 
-function ContactForm({ addContact }) {
-  const [state, setState] = React.useState({
-    name: '',
-    number: '',
-  });
-  const { name, number } = state;
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addContact } from 'Redux/contactsSlice';
 
-  const handleChange = event => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.value,
-    });
-  };
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    addContact(name, number);
-    setState({
-      name: '',
-      number: '',
-    });
-  };
+function ContactForm() {
+   const [name, setName] = useState('');
+   const [number, setNumber] = useState('');
+   const dispatch = useDispatch();
+  
+
+   const handleSubmit = e => {
+     e.preventDefault();
+     dispatch(addContact(name, number));
+     setName('');
+     setNumber('');
+   };
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -33,7 +27,7 @@ function ContactForm({ addContact }) {
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           value={name}
-          onChange={handleChange}
+          onChange={e => setName(e.target.value)}
           required
         />
       </label>
@@ -44,7 +38,7 @@ function ContactForm({ addContact }) {
           name="number"
           value={number}
           pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-          onChange={handleChange}
+          onChange={e => setNumber(e.target.value)}
           required
         />
       </label>
@@ -53,8 +47,6 @@ function ContactForm({ addContact }) {
   );
 }
 
-ContactForm.propTypes = {
-  addContact: PropTypes.func.isRequired,
-};
+
 
 export default ContactForm;
