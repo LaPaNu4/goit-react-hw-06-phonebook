@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
 
 const initialState = {
   contacts: [],
@@ -11,25 +10,10 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {
     addContact: (state, action) => {
-      const { name, number } = action.payload;
-      const isDuplicate = state.contacts.some(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
-      );
-      if (isDuplicate) {
-        alert('This contact already exists in the phone book!!');
-        return;
-      }
-      state.contacts.push({
-        id: nanoid(),
-        name,
-        number,
-      });
+      state.contacts.push(action.payload);
     },
     removeContact: (state, action) => {
-      const contactId = action.payload;
-      state.contacts = state.contacts.filter(
-        contact => contact.id !== contactId
-      );
+      state.contacts = action.payload;
     },
     updateFilter: (state, action) => {
       state.filter = action.payload;

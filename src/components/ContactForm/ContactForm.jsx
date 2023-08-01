@@ -1,33 +1,43 @@
-
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'Redux/contactsSlice';
-
+import { nanoid } from 'nanoid';
+import { selectContacts } from 'Redux/selector';
 
 function ContactForm() {
-    const [contact, setContact] = useState({
+    const contacts = useSelector(selectContacts);
+  const [contact, setContact] = useState({
+    name: '',
+    number: '',
+  });
+  const { name, number } = contact;
+  const dispatch = useDispatch();
+
+  const handleChange = event => {
+    setContact({
+      ...contact,
+      id: nanoid(),
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    const isDuplicate = contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (isDuplicate) {
+      alert('This contact already exists in the phone book!!');
+      return;
+    }
+
+    dispatch(addContact(contact));
+    setContact({
       name: '',
       number: '',
     });
-  const { name, number } = contact;
-   const dispatch = useDispatch();
-  
-    const handleChange = event => {
-      setContact({
-        ...contact,
-        [event.target.name]: event.target.value,
-      });
-    };
-
-   const handleSubmit = e => {
-     e.preventDefault();
-     dispatch(addContact(contact));
-     setContact({
-       name: '',
-      number: '',
-     })
-   };
-
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -57,7 +67,5 @@ function ContactForm() {
     </form>
   );
 }
-
-
 
 export default ContactForm;
