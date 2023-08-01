@@ -3,12 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeContact } from 'Redux/contactsSlice';
 
 const ContactList = () => {
-   const contacts = useSelector(state => state.contacts.contacts);
-   const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contacts);
+    const filter = useSelector(state => state.contacts.filter);
+  const dispatch = useDispatch();
+  const getFilteredContacts = () => {
+    return contacts.filter(
+      contact =>
+        contact.name &&
+        contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+    const filteredContacts = getFilteredContacts();
  
   return (
     <ul>
-      {contacts.map(contact => (
+      {filteredContacts.map(contact => (
         <li key={contact.id}>
           {contact.name}: {contact.number}
           <button
